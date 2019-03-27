@@ -3,7 +3,7 @@ plugins {
 }
 
 sourceCompatibility = '1.8'
-targetCompatibility = '1.7'
+targetCompatibility = '1.8'
 version = '0.0.1'
 
 repositories {
@@ -17,7 +17,7 @@ test {
 dependencies {
     testCompile("org.junit.jupiter:junit-jupiter-api:5.4.1")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.1")
-    implementation("ch.qos.logback:logback-core:1.2.3") 
-    implementation("ch.qos.logback:logback-classic:1.2.3")
+    api("ch.qos.logback:logback-core:1.2.3") 
+    api("ch.qos.logback:logback-classic:1.2.3")
     implementation("com.google.guava:guava:27.1-jre")
 }
