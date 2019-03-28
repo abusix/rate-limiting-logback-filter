@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 sourceCompatibility = '1.8'
@@ -20,4 +21,23 @@ dependencies {
     api("ch.qos.logback:logback-core:1.2.3") 
     api("ch.qos.logback:logback-classic:1.2.3")
     implementation("com.google.guava:guava:27.1-jre")
+}
+
+jar {
+    from "LICENSE"
+}
+
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'myRepo'
+            url = "file://${buildDir}/repo"
+        }
+    }
 }

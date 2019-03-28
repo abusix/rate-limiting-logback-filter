@@ -44,7 +44,7 @@ public class RateLimitingLogbackFilter extends Filter<ILoggingEvent>{
     public void start() {
         eventCache = CacheBuilder.newBuilder()
                 .maximumSize(maximumCacheSize)
-                .expireAfterAccess(expireAfterDuration)
+                .expireAfterWrite(expireAfterDuration)
                 .build();
         super.start();
     }
