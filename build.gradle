@@ -1,11 +1,13 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'signing'
+    id 'net.researchgate.release' version '2.6.0'
 }
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
-version = '0.1.0'
+version = '0.1.0-SNAPSHOT'
 
 repositories {
     jcenter()
@@ -27,17 +29,65 @@ jar {
     from "LICENSE"
 }
 
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+    from "LICENSE"
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    from "LICENSE"
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+if (project.hasProperty("signing.keyId")) {
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
+
 publishing {
     publications {
-        myLibrary(MavenPublication) {
-            from components.java
+         mavenJava(MavenPublication) {
+            pom {
+                name = 'Rate-Limiting Logback Filter'
+                description = 'Can be used to rate limit log events based on logger name and top of stack/message (e.g. for sentry.io)'
+                url = 'https://github.com/abusix/rate-limiting-logback-filter'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/abusix/rate-limiting-logback-filter/blob/master/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'FrederikP'
+                        name = 'Frederik Petersen'
+                        email = 'fp@abusix.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/abusix/rate-limiting-logback-filter.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:abusix/rate-limiting-logback-filter.git'
+                    url = 'https://github.com/abusix/rate-limiting-logback-filter'
+                }
+            }
         }
     }
 
     repositories {
         maven {
-            name = 'myRepo'
-            url = "file://${buildDir}/repo"
+            name = 'Maven Central Releases'
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+        }
+        maven {
+            name = 'Maven Central Snapshots'
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
     }
 }
