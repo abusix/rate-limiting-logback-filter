@@ -7,6 +7,8 @@ plugins {
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
+
+group = 'com.abusix.util'
 version = '0.1.0-SNAPSHOT'
 
 repositories {
@@ -18,43 +20,40 @@ test {
 }
 
 dependencies {
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.4.1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.1")
-    api("ch.qos.logback:logback-core:1.2.3") 
-    api("ch.qos.logback:logback-classic:1.2.3")
-    implementation("com.google.guava:guava:27.1-jre")
+    testCompile('org.junit.jupiter:junit-jupiter-api:5.4.1')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.1')
+    api('ch.qos.logback:logback-core:1.2.3') 
+    api('ch.qos.logback:logback-classic:1.2.3')
+    implementation('com.google.guava:guava:27.1-jre')
 }
 
 jar {
-    from "LICENSE"
+    from 'LICENSE'
 }
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc
-    from "LICENSE"
+    from 'LICENSE'
 }
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
-    from "LICENSE"
+    from 'LICENSE'
 }
 
 artifacts {
     archives javadocJar, sourcesJar
 }
 
-if (project.hasProperty("signing.keyId")) {
-    signing {
-        sign publishing.publications.mavenJava
-    }
-}
-
 publishing {
     publications {
          mavenJava(MavenPublication) {
             pom {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
                 name = 'Rate-Limiting Logback Filter'
                 description = 'Can be used to rate limit log events based on logger name and top of stack/message (e.g. for sentry.io)'
                 url = 'https://github.com/abusix/rate-limiting-logback-filter'
@@ -81,13 +80,29 @@ publishing {
     }
 
     repositories {
+//        maven {
+//            name = 'Central'
+//            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+//            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+//            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+//            credentials {
+//                username project.ossrhUsername
+//                password project.ossrhPassword
+//            }
+//        }
         maven {
-            name = 'Maven Central Releases'
-            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-        }
-        maven {
-            name = 'Maven Central Snapshots'
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            name = 'Jfrog'
+            def releasesRepoUrl = 'https://abusix.jfrog.io/abusix/libs-release-local'
+            def snapshotsRepoUrl = 'https://abusix.jfrog.io/abusix/libs-snapshot-local'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username project.jfrogUsername
+                password project.jfrogPassword
+            }
         }
     }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
