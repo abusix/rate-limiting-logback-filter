@@ -86,18 +86,6 @@ publishing {
                 }
             }
         }
-        maven {
-            name = 'Jfrog'
-            def releasesRepoUrl = 'https://abusix.jfrog.io/abusix/libs-release-local'
-            def snapshotsRepoUrl = 'https://abusix.jfrog.io/abusix/libs-snapshot-local'
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            if (project.hasProperty("jfrogUsername") && project.hasProperty("jfrogPassword")) {
-                credentials {
-                    username project.jfrogUsername
-                    password project.jfrogPassword
-                }
-            }
-        }
     }
 }
 
@@ -105,4 +93,4 @@ signing {
     sign publishing.publications.mavenJava
 }
 
-afterReleaseBuild.dependsOn publish
+afterReleaseBuild.dependsOn publishMavenJavaPublicationToCentralRepository
