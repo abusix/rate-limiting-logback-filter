@@ -9,6 +9,10 @@ For our java applications we use sentry-logback. This filter can be used to only
 timeframe for a combination of loggername + (first line in stack OR log message).
 
 
-## Publishing to repository
+## Publishing snapshot
 
-`gradle clean build publishMavenJavaPublicationToCentralRepository`
+`gradle clean build publish`
+
+## Publishing release
+
+`gradle clean release`

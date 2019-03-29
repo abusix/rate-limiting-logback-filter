@@ -106,4 +106,8 @@ if (project.hasProperty("project.ossrhUsername") && project.hasProperty("project
     signing {
         sign publishing.publications.mavenJava
     }
+    
+    release {
+        afterReleaseBuild.dependsOn publish
+    }
 }
