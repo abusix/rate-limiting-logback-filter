@@ -41,10 +41,6 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-release {
-    afterReleaseBuild.dependsOn publishMavenJavaPublicationToCentralRepository
-}
-
 if (project.hasProperty("project.ossrhUsername") && project.hasProperty("project.jfrogUsername")) {
     publishing {
         publications {
@@ -104,6 +100,10 @@ if (project.hasProperty("project.ossrhUsername") && project.hasProperty("project
 
     signing {
         sign publishing.publications.mavenJava
+    }
+    
+    release {
+        afterReleaseBuild.dependsOn publishMavenJavaPublicationToCentralRepository
     }
 
 }
