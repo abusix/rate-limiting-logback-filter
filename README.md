@@ -1,5 +1,5 @@
-![Travis (.org)](https://img.shields.io/travis/abusix/rate-limiting-logback-filter.svg)
-![Maven Central](https://img.shields.io/maven-central/v/com.abusix.util/rate-limiting-logback-filter.svg)
+[![Travis (.org)](https://img.shields.io/travis/abusix/rate-limiting-logback-filter.svg)](https://travis-ci.org/abusix/rate-limiting-logback-filter)
+[![Maven Central](https://img.shields.io/maven-central/v/com.abusix.util/rate-limiting-logback-filter.svg)](https://search.maven.org/artifact/com.abusix.util/rate-limiting-logback-filter/)
 
 # Rate-Limiting Logback Filter
 
@@ -13,18 +13,30 @@ timeframe for a combination of loggername + (first line in stack OR log message)
 
 ## Usage
 
-Add to dependencies:
+### Add as a dependency:
 
+Maven:
 ```
 <dependency>
     <groupId>com.abusix.util</groupId>
     <artifactId>rate-limiting-logback-filter</artifactId>
     <version>{LATEST VERSION}</version>
 </dependency>
-
 ```
 
-Add to appender in logback config. E.g.:
+Gradle (groovy):
+```
+implementation 'com.abusix.util:rate-limiting-logback-filter:0.1.0'
+```
+
+Gradle (kotlin):
+```
+compile("com.abusix.util:rate-limiting-logback-filter:0.1.0")
+```
+
+### Add to logback config:
+
+Add as a filter to the appender. Example:
 
 ```
 <appender name="Sentry" class="io.sentry.logback.SentryAppender">
