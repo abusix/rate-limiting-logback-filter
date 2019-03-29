@@ -26,12 +26,12 @@ Maven:
 
 Gradle (groovy):
 ```
-implementation 'com.abusix.util:rate-limiting-logback-filter:0.1.0'
+implementation 'com.abusix.util:rate-limiting-logback-filter:{LATEST VERSION}'
 ```
 
 Gradle (kotlin):
 ```
-compile("com.abusix.util:rate-limiting-logback-filter:0.1.0")
+compile("com.abusix.util:rate-limiting-logback-filter:{LATEST VERSION}")
 ```
 
 ### Add to logback config:
