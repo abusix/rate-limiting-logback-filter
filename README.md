@@ -7,3 +7,8 @@ losing important one-time-only events.
  
 For our java applications we use sentry-logback. This filter can be used to only send one event per defined
 timeframe for a combination of loggername + (first line in stack OR log message).
+
+
+## Publishing to repository
+
+`gradle clean build publishMavenJavaPublicationToCentralRepository`

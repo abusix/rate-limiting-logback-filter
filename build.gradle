@@ -16,13 +16,13 @@ repositories {
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-api:5.4.1')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.1')
-    api('ch.qos.logback:logback-core:1.2.3') 
+    api('ch.qos.logback:logback-core:1.2.3')
     api('ch.qos.logback:logback-classic:1.2.3')
     implementation('com.google.guava:guava:27.1-jre')
 }
@@ -46,63 +46,64 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives javadocJar, sourcesJar
 }
-
-publishing {
-    publications {
-         mavenJava(MavenPublication) {
-            pom {
-                from components.java
-                artifact sourcesJar
-                artifact javadocJar
-                name = 'Rate-Limiting Logback Filter'
-                description = 'Can be used to rate limit log events based on logger name and top of stack/message (e.g. for sentry.io)'
-                url = 'https://github.com/abusix/rate-limiting-logback-filter'
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://github.com/abusix/rate-limiting-logback-filter/blob/master/LICENSE'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'FrederikP'
-                        name = 'Frederik Petersen'
-                        email = 'fp@abusix.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:https://github.com/abusix/rate-limiting-logback-filter.git'
-                    developerConnection = 'scm:git:ssh://git@github.com:abusix/rate-limiting-logback-filter.git'
+if (project.hasProperty("project.ossrhUsername") && project.hasProperty("project.jfrogUsername")) {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                pom {
+                    from components.java
+                    artifact sourcesJar
+                    artifact javadocJar
+                    name = 'Rate-Limiting Logback Filter'
+                    description = 'Can be used to rate limit log events based on logger name and top of stack/message (e.g. for sentry.io)'
                     url = 'https://github.com/abusix/rate-limiting-logback-filter'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://github.com/abusix/rate-limiting-logback-filter/blob/master/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'FrederikP'
+                            name = 'Frederik Petersen'
+                            email = 'fp@abusix.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:https://github.com/abusix/rate-limiting-logback-filter.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:abusix/rate-limiting-logback-filter.git'
+                        url = 'https://github.com/abusix/rate-limiting-logback-filter'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = 'Central'
+                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username project.ossrhUsername
+                    password project.ossrhPassword
+                }
+            }
+            maven {
+                name = 'Jfrog'
+                def releasesRepoUrl = 'https://abusix.jfrog.io/abusix/libs-release-local'
+                def snapshotsRepoUrl = 'https://abusix.jfrog.io/abusix/libs-snapshot-local'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username project.jfrogUsername
+                    password project.jfrogPassword
                 }
             }
         }
     }
 
-    repositories {
-        maven {
-            name = 'Central'
-            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            credentials {
-                username project.ossrhUsername
-                password project.ossrhPassword
-            }
-        }
-        maven {
-            name = 'Jfrog'
-            def releasesRepoUrl = 'https://abusix.jfrog.io/abusix/libs-release-local'
-            def snapshotsRepoUrl = 'https://abusix.jfrog.io/abusix/libs-snapshot-local'
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            credentials {
-                username project.jfrogUsername
-                password project.jfrogPassword
-            }
-        }
+    signing {
+        sign publishing.publications.mavenJava
     }
-}
-
-signing {
-    sign publishing.publications.mavenJava
 }
