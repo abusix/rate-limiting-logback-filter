@@ -5,12 +5,6 @@ plugins {
     id 'net.researchgate.release' version '2.6.0'
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
-
-group = 'com.abusix.util'
-version = '0.1.0-SNAPSHOT'
-
 repositories {
     jcenter()
 }
@@ -46,6 +40,11 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives javadocJar, sourcesJar
 }
+
+release {
+    afterReleaseBuild.dependsOn publishMavenJavaPublicationToCentralRepository
+}
+
 if (project.hasProperty("project.ossrhUsername") && project.hasProperty("project.jfrogUsername")) {
     publishing {
         publications {
@@ -106,8 +105,5 @@ if (project.hasProperty("project.ossrhUsername") && project.hasProperty("project
     signing {
         sign publishing.publications.mavenJava
     }
-    
-    release {
-        afterReleaseBuild.dependsOn publish
-    }
+
 }
