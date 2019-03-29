@@ -11,7 +11,7 @@ timeframe for a combination of loggername + (first line in stack OR log message)
 
 ## Publishing snapshot
 
-`gradle clean build publishMavenJavaPublicationToCentralRepository`
+`gradle clean build publish`
 
 ## Publishing release
 
